@@ -1,4 +1,5 @@
 import re
+from collections import deque
 from textnode import TextType, TextNode
 # This is `an` example -> [This is a , an, example]
 # This `has` multiple `ones` -> [This, has, multiple, ones]
@@ -35,3 +36,36 @@ def extract_markdown_links(text):
     pattern = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
     links = re.findall(pattern, text)
     return links
+
+
+def split_nodes_images(old_nodes):
+    new_nodes = []
+    split_nodes = []
+    for nodes in old_nodes:
+        images = extract_markdown_images(nodes.text)
+        for i in range(len(images)):
+            # print(images[i])
+            sections = nodes.text.split(f"![{images[i][0]}]({images[i][1]})", 1)
+            print(sections)
+        if i == 0:
+            split_nodes.append(TextNode(sections[0], TextType.TEXT))
+            split_nodes.append(TextNode(images[i][0], TextType.IMAGE, images[i][1]))
+
+    print(split_nodes)
+
+    # return sections
+
+
+def split_nodes_links(old_nodes):
+    pass
+
+
+test = TextNode(
+    "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
+    TextType.TEXT,
+)
+test2 = TextNode(
+    "This is another text with an ![image2](https://i.imgur.com/zjjcJKZ.png) and another ![second image2](https://i.imgur.com/3elNhQu.png)",
+    TextType.TEXT,
+)
+split_nodes_images([test, test2])
