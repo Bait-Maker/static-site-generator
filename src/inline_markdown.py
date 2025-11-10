@@ -1,6 +1,7 @@
 import re
-from collections import deque
 from textnode import TextType, TextNode
+
+
 # This is `an` example -> [This is a , an, example]
 # This `has` multiple `ones` -> [This, has, multiple, ones]
 
@@ -92,6 +93,18 @@ def split_nodes_link(old_nodes):
     return new_nodes
 
 
+def text_to_textnodes(text):
+    original_node = TextNode(text, TextType.TEXT)
+    bold_nodes = split_nodes_delimiter([original_node], "**", TextType.BOLD)
+    italic_nodes = split_nodes_delimiter(bold_nodes, "_", TextType.ITALIC)
+    split_nodes = split_nodes_delimiter(italic_nodes, "`", TextType.CODE)
+
+    image_nodes = split_nodes_image(split_nodes)
+    new_nodes = split_nodes_link(image_nodes)
+
+    return new_nodes
+
+
 # test = TextNode(
 #     "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
 #     TextType.TEXT,
@@ -109,3 +122,7 @@ def split_nodes_link(old_nodes):
 # print("LINKS: -----------------")
 
 # print(split_nodes_link([link_test]))
+
+# text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+
+# text_to_textnodes(text)
