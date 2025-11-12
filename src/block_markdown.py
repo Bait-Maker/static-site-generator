@@ -74,16 +74,19 @@ def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
     for block in blocks:
         block_type = block_to_block_type(block)
+        create_html_node(block, block_type)
 
 
-def create_html_node(block_type):
+def create_html_node(block, block_type):
     match block_type:
         case BlockType.PARAGRAPH:
-            return HTMLNode("p")
+            return HTMLNode("p", block)
         case BlockType.HEADING:
-            return HTMLNode("h1")
+            return HTMLNode("h1", block)
         case BlockType.CODE:
-            return HTMLNode("code")
+            return HTMLNode("code", block)
+        case BlockType.ULIST:
+            return HTMLNode("ul", block)
 
 
 # b = "## This is a heading block"
