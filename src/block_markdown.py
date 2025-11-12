@@ -1,4 +1,5 @@
 from enum import Enum
+from htmlnode import HTMLNode
 
 
 class BlockType(Enum):
@@ -67,6 +68,22 @@ def markdown_to_blocks(markdown: str):
             blocks.append(string.strip())
 
     return blocks
+
+
+def markdown_to_html_node(markdown):
+    blocks = markdown_to_blocks(markdown)
+    for block in blocks:
+        block_type = block_to_block_type(block)
+
+
+def create_html_node(block_type):
+    match block_type:
+        case BlockType.PARAGRAPH:
+            return HTMLNode("p")
+        case BlockType.HEADING:
+            return HTMLNode("h1")
+        case BlockType.CODE:
+            return HTMLNode("code")
 
 
 # b = "## This is a heading block"
