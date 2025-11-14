@@ -18,7 +18,7 @@ def generate_page(from_path, template_path, dest_path):
     new_template = template.replace("{{ Content }}", html_string)
     new_template = new_template.replace("{{ Title }}", title)
 
-    with open(f"{dest_path}/index.html", "w") as file:
+    with open(f"{dest_path}", "w") as file:
         try:
             print(f"Writing file into {dest_path}...")
             file.write(new_template)
